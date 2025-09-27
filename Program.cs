@@ -53,6 +53,27 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+// Crear el rol "Broker" si no existe
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+    if (!await roleManager.RoleExistsAsync("Broker"))
+    {
+        await roleManager.CreateAsync(new IdentityRole("Broker"));
+    }
+
+    // Opcional: Asignar el rol a un usuario de prueba
+    var testUser = await userManager.FindByEmailAsync("broker@example.com");
+    if (testUser == null)
+    {
+        testUser = new IdentityUser { UserName = "broker@example.com", Email = "broker@example.com", EmailConfirmed = true };
+        await userManager.CreateAsync(testUser, "TestPass123!");
+        await userManager.AddToRoleAsync(testUser, "Broker");
+    }
+}
+
 app.MapStaticAssets();
 
 app.MapControllerRoute(
