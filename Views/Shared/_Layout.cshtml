@@ -54,6 +54,16 @@
                 </a>
             </li>
         }
+        @using Microsoft.AspNetCore.Identity
+        @inject UserManager<IdentityUser> UserManager
+        @inject SignInManager<IdentityUser> SignInManager
+
+        @if (SignInManager.IsSignedIn(User) && await UserManager.IsInRoleAsync(await UserManager.GetUserAsync(User), "Broker"))
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="Broker" asp-controller="Broker" asp-action="Agenda">Panel Broker</a>
+            </li>
+        }
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

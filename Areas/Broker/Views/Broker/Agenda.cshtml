@@ -1,0 +1,46 @@
+@{
+    ViewData["Title"] = "Agenda del Día";
+    var visitas = (List<Visita>)ViewBag.Visitas;
+    var reservas = (List<Reserva>)ViewBag.Reservas;
+}
+
+<h2>Agenda de Hoy</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <h4>Visitas Agendadas</h4>
+        <ul class="list-group">
+            @foreach (var visita in visitas)
+            {
+                <li class="list-group-item">
+                    Inmueble: @visita.Inmueble.Titulo <br>
+                    Cliente: @visita.Usuario.Email <br>
+                    Fecha: @visita.FechaInicio.ToString("g") - @visita.FechaFin.ToString("g") <br>
+                    Estado: @visita.Estado
+                    @if (visita.Estado == EstadoVisita.Solicitada)
+                    {
+                        <form asp-action="ConfirmarVisita" asp-route-id="@visita.Id" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-success">Confirmar</button>
+                        </form>
+                    }
+                </li>
+            }
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <h4>Reservas Activas</h4>
+        <ul class="list-group">
+            @foreach (var reserva in reservas)
+            {
+                <li class="list-group-item">
+                    Inmueble: @reserva.Inmueble.Titulo <br>
+                    Cliente: @reserva.Usuario.Email <br>
+                    Expira: @reserva.FechaExpiracion.ToString("g")
+                    <form asp-action="LiberarReserva" asp-route-id="@reserva.Id" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-sm btn-danger">Liberar</button>
+                    </form>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
