@@ -4,6 +4,10 @@ using PC2_PatrickPonce.Data;
 using PC2_PatrickPonce.Models;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http; // Necesario para IHttpContextAccessor y Session
+using System.Text.Json; // Necesario para serialización
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims; // Necesario para User.FindFirstValue
 
 public class InmuebleController : Controller
 {
@@ -64,6 +68,16 @@ public class InmuebleController : Controller
         int pageSize = 10;
         var totalInmuebles = await query.CountAsync();
         var inmuebles = await query.Skip((pagina - 1) * pageSize).Take(pageSize).ToListAsync();
+        var filtros = new
+        {
+            Ciudad = ciudad,
+            Tipo = tipo,
+            PrecioMin = precioMin,
+            PrecioMax = precioMax,
+            Dormitorios = dormitorios
+        };
+
+        HttpContext.Session.SetString("FiltrosCatalogo", JsonSerializer.Serialize(filtros));
 
         // Pasa los datos a la vista
         ViewData["TotalPaginas"] = (int)Math.Ceiling(totalInmuebles / (double)pageSize);
