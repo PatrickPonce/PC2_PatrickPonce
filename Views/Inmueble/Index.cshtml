@@ -1,4 +1,3 @@
-@model PC2_PatrickPonce.ViewModels.FiltrosInmuebleViewModel
 @{
     ViewData["Title"] = "Catálogo de Inmuebles";
 }
@@ -10,31 +9,33 @@
     <form asp-action="Index" method="get">
         <div class="row g-3">
             <div class="col-md-3">
-                <label asp-for="Ciudad" class="form-label">Ciudad</label>
-                <input asp-for="Ciudad" class="form-control">
-                <span asp-validation-for="Ciudad" class="text-danger"></span>
+                <label for="ciudad" class="form-label">Ciudad</label>
+                <input type="text" name="ciudad" id="ciudad" class="form-control" value="@ViewData["Ciudad"]">
             </div>
             <div class="col-md-3">
-                <label asp-for="Tipo" class="form-label">Tipo</label>
-                <select asp-for="Tipo" asp-items="Html.GetEnumSelectList<TipoInmueble>()" class="form-select">
+                <label for="tipo" class="form-label">Tipo</label>
+                <select name="tipo" id="tipo" class="form-select">
                     <option value="">Todos</option>
+                    @foreach (var type in Enum.GetValues(typeof(TipoInmueble)))
+                    {
+                        <option value="@type">@type</option>
+                    }
                 </select>
-                <span asp-validation-for="Tipo" class="text-danger"></span>
             </div>
             <div class="col-md-2">
-                <label asp-for="PrecioMin" class="form-label">Precio Mínimo</label>
-                <input asp-for="PrecioMin" type="number" class="form-control">
-                <span asp-validation-for="PrecioMin" class="text-danger"></span>
+                <label for="precioMin" class="form-label">Precio Mínimo</label>
+                <input type="number" name="precioMin" id="precioMin" class="form-control" value="@ViewData["PrecioMin"]">
+                <span asp-validation-for="precioMin" class="text-danger"></span>
             </div>
             <div class="col-md-2">
-                <label asp-for="PrecioMax" class="form-label">Precio Máximo</label>
-                <input asp-for="PrecioMax" type="number" class="form-control">
-                <span asp-validation-for="PrecioMax" class="text-danger"></span>
+                <label for="precioMax" class="form-label">Precio Máximo</label>
+                <input type="number" name="precioMax" id="precioMax" class="form-control" value="@ViewData["PrecioMax"]">
+                <span asp-validation-for="precioMax" class="text-danger"></span>
             </div>
             <div class="col-md-2">
-                <label asp-for="Dormitorios" class="form-label">Dormitorios >=</label>
-                <input asp-for="Dormitorios" type="number" class="form-control">
-                <span asp-validation-for="Dormitorios" class="text-danger"></span>
+                <label for="dormitorios" class="form-label">Dormitorios >=</label>
+                <input type="number" name="dormitorios" id="dormitorios" class="form-control" value="@ViewData["Dormitorios"]">
+                <span asp-validation-for="dormitorios" class="text-danger"></span>
             </div>
         </div>
         <div class="d-flex justify-content-end mt-3">
@@ -45,7 +46,7 @@
 </div>
 
 <div class="row">
-    @foreach (var item in Model.Inmuebles)
+    @foreach (var item in Model)
     {
         <div class="col-md-4 mb-4">
             <div class="card h-100">
