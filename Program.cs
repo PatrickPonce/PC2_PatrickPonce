@@ -74,7 +74,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
 // Verifica el entorno para usar el proveedor de DB correcto
 if (builder.Environment.IsProduction())
