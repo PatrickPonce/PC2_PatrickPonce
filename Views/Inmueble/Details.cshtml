@@ -1,13 +1,65 @@
-public async Task<IActionResult> Details(int? id)
+@{
+    ViewData["Title"] = "Catálogo de Inmuebles";
+}
+
+@* Mensajes de Feedback *@
+@if (TempData["Success"] != null)
 {
-    if (id == null)
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+<div asp-validation-summary="All" class="text-danger"></div>
+
+<h2>@Model.Titulo</h2>
+<p>Precio: $@Model.Precio</p>
+<p>Dirección: @Model.Direccion</p>
+
+<hr />
+
+@* Lógica para mostrar/ocultar los formularios *@
+@if (User.Identity.IsAuthenticated)
+{
+    bool tieneReservaActiva = await _context.Reservas.AnyAsync(r => r.InmuebleId == Model.Id && r.FechaExpiracion > DateTime.Now);
+
+    if (tieneReservaActiva)
     {
-        return NotFound();
+        <div class="alert alert-warning">
+            Este inmueble ya está reservado por un cliente.
+        </div>
     }
-    var inmueble = await _context.Inmuebles.FirstOrDefaultAsync(m => m.Id == id);
-    if (inmueble == null)
+    else
     {
-        return NotFound();
+        <form asp-action="Reservar" asp-route-inmuebleId="@Model.Id" method="post" class="mb-4">
+            <button type="submit" class="btn btn-warning">Reservar ahora (48h)</button>
+        </form>
     }
-    return View(inmueble);
+
+    <h4>Agendar una visita</h4>
+    <form asp-action="AgendarVisita" asp-route-inmuebleId="@Model.Id" method="post">
+        <div class="form-group mb-3">
+            <label for="FechaInicio" class="form-label">Fecha de Inicio</label>
+            <input type="datetime-local" asp-for="FechaInicio" class="form-control" />
+            <span asp-validation-for="FechaInicio" class="text-danger"></span>
+        </div>
+        <div class="form-group mb-3">
+            <label for="FechaFin" class="form-label">Fecha de Fin</label>
+            <input type="datetime-local" asp-for="FechaFin" class="form-control" />
+            <span asp-validation-for="FechaFin" class="text-danger"></span>
+        </div>
+        <div class="form-group mb-3">
+            <label for="Notas" class="form-label">Notas (Opcional)</label>
+            <textarea asp-for="Notas" class="form-control"></textarea>
+            <span asp-validation-for="Notas" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Agendar Visita</button>
+    </form>
+}
+else
+{
+    <div class="alert alert-info">
+        Debes <a asp-area="Identity" asp-page="/Account/Login">iniciar sesión</a> para agendar una visita o reservar un inmueble.
+    </div>
 }
