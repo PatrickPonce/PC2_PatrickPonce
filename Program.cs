@@ -14,7 +14,27 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
+var redisConnectionString = builder.Configuration.GetValue<string>("Redis:ConnectionString");
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = redisConnectionString;
+    options.InstanceName = "PortalInmobiliario_";
+});
+
+builder.Services.AddSession(options =>
+{
+    // Define el tiempo de inactividad de la sesión
+    options.IdleTimeout = TimeSpan.FromMinutes(30); 
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true; // Hace que la cookie de sesión sea esencial para el funcionamiento de la app
+});
+
 var app = builder.Build();
+
+app.UseSession(); // Habilita el middleware de sesión
+app.UseAuthentication();
+app.UseAuthorization();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
