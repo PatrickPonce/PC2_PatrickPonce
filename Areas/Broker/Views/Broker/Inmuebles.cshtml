@@ -1,0 +1,30 @@
+@model List<Inmueble>
+<h2>Gestión de Inmuebles</h2>
+<a asp-action="Create" class="btn btn-primary mb-3">Crear Nuevo Inmueble</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Código</th>
+            <th>Activo</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Titulo</td>
+                <td>@item.Codigo</td>
+                <td>@item.Activo</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-info">Editar</a>
+                    <form asp-action="ToggleActive" asp-route-id="@item.Id" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-sm btn-warning">@(!item.Activo ? "Activar" : "Desactivar")</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
