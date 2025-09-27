@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PC2_PatrickPonce.Data;
 
@@ -10,9 +11,11 @@ using PC2_PatrickPonce.Data;
 namespace PC2_PatrickPonce.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250927014954_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.9");
@@ -65,38 +68,6 @@ namespace PC2_PatrickPonce.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Inmuebles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Activo = true,
-                            Banos = 1,
-                            Ciudad = "Lima",
-                            Codigo = "A001",
-                            Direccion = "Av. Principal 123",
-                            Dormitorios = 2,
-                            Imagen = "departamento1.jpg",
-                            MetrosCuadrados = 80.0,
-                            Precio = 150000.0,
-                            Tipo = 0,
-                            Titulo = "Apartamento céntrico"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Activo = true,
-                            Banos = 2,
-                            Ciudad = "Arequipa",
-                            Codigo = "C001",
-                            Direccion = "Calle Los Olivos 456",
-                            Dormitorios = 3,
-                            Imagen = "casa1.jpg",
-                            MetrosCuadrados = 120.0,
-                            Precio = 250000.0,
-                            Tipo = 1,
-                            Titulo = "Casa con jardín"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
